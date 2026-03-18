@@ -10,27 +10,55 @@ import * as Contracts from "./index.js";
 
 declare module "@nomicfoundation/hardhat-ethers/types" {
   interface HardhatEthersHelpers extends HardhatEthersHelpersBase {
-  getContractFactory(name: 'KaanSale', signerOrOptions?: ethers.Signer | FactoryOptions): Promise<Contracts.KaanSale__factory>
+  getContractFactory(name: 'IKaanGToken', signerOrOptions?: ethers.Signer | FactoryOptions): Promise<Contracts.IKaanGToken__factory>
+getContractFactory(name: 'KaanBuildVault', signerOrOptions?: ethers.Signer | FactoryOptions): Promise<Contracts.KaanBuildVault__factory>
+getContractFactory(name: 'IKaanGYieldVault', signerOrOptions?: ethers.Signer | FactoryOptions): Promise<Contracts.IKaanGYieldVault__factory>
+getContractFactory(name: 'KaanGToken', signerOrOptions?: ethers.Signer | FactoryOptions): Promise<Contracts.KaanGToken__factory>
+getContractFactory(name: 'IKaanBuildVault', signerOrOptions?: ethers.Signer | FactoryOptions): Promise<Contracts.IKaanBuildVault__factory>
+getContractFactory(name: 'KaanGYieldVault', signerOrOptions?: ethers.Signer | FactoryOptions): Promise<Contracts.KaanGYieldVault__factory>
+getContractFactory(name: 'KaanSale', signerOrOptions?: ethers.Signer | FactoryOptions): Promise<Contracts.KaanSale__factory>
 getContractFactory(name: 'IKaanYieldVault', signerOrOptions?: ethers.Signer | FactoryOptions): Promise<Contracts.IKaanYieldVault__factory>
 getContractFactory(name: 'KaanToken', signerOrOptions?: ethers.Signer | FactoryOptions): Promise<Contracts.KaanToken__factory>
+getContractFactory(name: 'KaanXToken', signerOrOptions?: ethers.Signer | FactoryOptions): Promise<Contracts.KaanXToken__factory>
 getContractFactory(name: 'KaanYieldVault', signerOrOptions?: ethers.Signer | FactoryOptions): Promise<Contracts.KaanYieldVault__factory>
 getContractFactory(name: 'MockUSDC', signerOrOptions?: ethers.Signer | FactoryOptions): Promise<Contracts.MockUSDC__factory>
 
-  getContractAt(name: 'KaanSale', address: string | ethers.Addressable, signer?: ethers.Signer): Promise<Contracts.KaanSale>
+  getContractAt(name: 'IKaanGToken', address: string | ethers.Addressable, signer?: ethers.Signer): Promise<Contracts.IKaanGToken>
+getContractAt(name: 'KaanBuildVault', address: string | ethers.Addressable, signer?: ethers.Signer): Promise<Contracts.KaanBuildVault>
+getContractAt(name: 'IKaanGYieldVault', address: string | ethers.Addressable, signer?: ethers.Signer): Promise<Contracts.IKaanGYieldVault>
+getContractAt(name: 'KaanGToken', address: string | ethers.Addressable, signer?: ethers.Signer): Promise<Contracts.KaanGToken>
+getContractAt(name: 'IKaanBuildVault', address: string | ethers.Addressable, signer?: ethers.Signer): Promise<Contracts.IKaanBuildVault>
+getContractAt(name: 'KaanGYieldVault', address: string | ethers.Addressable, signer?: ethers.Signer): Promise<Contracts.KaanGYieldVault>
+getContractAt(name: 'KaanSale', address: string | ethers.Addressable, signer?: ethers.Signer): Promise<Contracts.KaanSale>
 getContractAt(name: 'IKaanYieldVault', address: string | ethers.Addressable, signer?: ethers.Signer): Promise<Contracts.IKaanYieldVault>
 getContractAt(name: 'KaanToken', address: string | ethers.Addressable, signer?: ethers.Signer): Promise<Contracts.KaanToken>
+getContractAt(name: 'KaanXToken', address: string | ethers.Addressable, signer?: ethers.Signer): Promise<Contracts.KaanXToken>
 getContractAt(name: 'KaanYieldVault', address: string | ethers.Addressable, signer?: ethers.Signer): Promise<Contracts.KaanYieldVault>
 getContractAt(name: 'MockUSDC', address: string | ethers.Addressable, signer?: ethers.Signer): Promise<Contracts.MockUSDC>
 
-  deployContract(name: 'KaanSale', signerOrOptions?: ethers.Signer | DeployContractOptions): Promise<Contracts.KaanSale>
+  deployContract(name: 'IKaanGToken', signerOrOptions?: ethers.Signer | DeployContractOptions): Promise<Contracts.IKaanGToken>
+deployContract(name: 'KaanBuildVault', signerOrOptions?: ethers.Signer | DeployContractOptions): Promise<Contracts.KaanBuildVault>
+deployContract(name: 'IKaanGYieldVault', signerOrOptions?: ethers.Signer | DeployContractOptions): Promise<Contracts.IKaanGYieldVault>
+deployContract(name: 'KaanGToken', signerOrOptions?: ethers.Signer | DeployContractOptions): Promise<Contracts.KaanGToken>
+deployContract(name: 'IKaanBuildVault', signerOrOptions?: ethers.Signer | DeployContractOptions): Promise<Contracts.IKaanBuildVault>
+deployContract(name: 'KaanGYieldVault', signerOrOptions?: ethers.Signer | DeployContractOptions): Promise<Contracts.KaanGYieldVault>
+deployContract(name: 'KaanSale', signerOrOptions?: ethers.Signer | DeployContractOptions): Promise<Contracts.KaanSale>
 deployContract(name: 'IKaanYieldVault', signerOrOptions?: ethers.Signer | DeployContractOptions): Promise<Contracts.IKaanYieldVault>
 deployContract(name: 'KaanToken', signerOrOptions?: ethers.Signer | DeployContractOptions): Promise<Contracts.KaanToken>
+deployContract(name: 'KaanXToken', signerOrOptions?: ethers.Signer | DeployContractOptions): Promise<Contracts.KaanXToken>
 deployContract(name: 'KaanYieldVault', signerOrOptions?: ethers.Signer | DeployContractOptions): Promise<Contracts.KaanYieldVault>
 deployContract(name: 'MockUSDC', signerOrOptions?: ethers.Signer | DeployContractOptions): Promise<Contracts.MockUSDC>
 
-  deployContract(name: 'KaanSale', args: any[], signerOrOptions?: ethers.Signer | DeployContractOptions): Promise<Contracts.KaanSale>
+  deployContract(name: 'IKaanGToken', args: any[], signerOrOptions?: ethers.Signer | DeployContractOptions): Promise<Contracts.IKaanGToken>
+deployContract(name: 'KaanBuildVault', args: any[], signerOrOptions?: ethers.Signer | DeployContractOptions): Promise<Contracts.KaanBuildVault>
+deployContract(name: 'IKaanGYieldVault', args: any[], signerOrOptions?: ethers.Signer | DeployContractOptions): Promise<Contracts.IKaanGYieldVault>
+deployContract(name: 'KaanGToken', args: any[], signerOrOptions?: ethers.Signer | DeployContractOptions): Promise<Contracts.KaanGToken>
+deployContract(name: 'IKaanBuildVault', args: any[], signerOrOptions?: ethers.Signer | DeployContractOptions): Promise<Contracts.IKaanBuildVault>
+deployContract(name: 'KaanGYieldVault', args: any[], signerOrOptions?: ethers.Signer | DeployContractOptions): Promise<Contracts.KaanGYieldVault>
+deployContract(name: 'KaanSale', args: any[], signerOrOptions?: ethers.Signer | DeployContractOptions): Promise<Contracts.KaanSale>
 deployContract(name: 'IKaanYieldVault', args: any[], signerOrOptions?: ethers.Signer | DeployContractOptions): Promise<Contracts.IKaanYieldVault>
 deployContract(name: 'KaanToken', args: any[], signerOrOptions?: ethers.Signer | DeployContractOptions): Promise<Contracts.KaanToken>
+deployContract(name: 'KaanXToken', args: any[], signerOrOptions?: ethers.Signer | DeployContractOptions): Promise<Contracts.KaanXToken>
 deployContract(name: 'KaanYieldVault', args: any[], signerOrOptions?: ethers.Signer | DeployContractOptions): Promise<Contracts.KaanYieldVault>
 deployContract(name: 'MockUSDC', args: any[], signerOrOptions?: ethers.Signer | DeployContractOptions): Promise<Contracts.MockUSDC>
 
