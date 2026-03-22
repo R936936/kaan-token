@@ -16,10 +16,15 @@ getContractFactory(name: 'IKaanGYieldVault', signerOrOptions?: ethers.Signer | F
 getContractFactory(name: 'KaanGToken', signerOrOptions?: ethers.Signer | FactoryOptions): Promise<Contracts.KaanGToken__factory>
 getContractFactory(name: 'IKaanBuildVault', signerOrOptions?: ethers.Signer | FactoryOptions): Promise<Contracts.IKaanBuildVault__factory>
 getContractFactory(name: 'KaanGYieldVault', signerOrOptions?: ethers.Signer | FactoryOptions): Promise<Contracts.KaanGYieldVault__factory>
+getContractFactory(name: 'IKaanBuildVault', signerOrOptions?: ethers.Signer | FactoryOptions): Promise<Contracts.IKaanBuildVault__factory>
+getContractFactory(name: 'IKaanGToken', signerOrOptions?: ethers.Signer | FactoryOptions): Promise<Contracts.IKaanGToken__factory>
+getContractFactory(name: 'IKaanYieldVault', signerOrOptions?: ethers.Signer | FactoryOptions): Promise<Contracts.IKaanYieldVault__factory>
+getContractFactory(name: 'KaanRedemption', signerOrOptions?: ethers.Signer | FactoryOptions): Promise<Contracts.KaanRedemption__factory>
 getContractFactory(name: 'KaanSale', signerOrOptions?: ethers.Signer | FactoryOptions): Promise<Contracts.KaanSale__factory>
 getContractFactory(name: 'IKaanYieldVault', signerOrOptions?: ethers.Signer | FactoryOptions): Promise<Contracts.IKaanYieldVault__factory>
 getContractFactory(name: 'KaanToken', signerOrOptions?: ethers.Signer | FactoryOptions): Promise<Contracts.KaanToken__factory>
 getContractFactory(name: 'KaanXToken', signerOrOptions?: ethers.Signer | FactoryOptions): Promise<Contracts.KaanXToken__factory>
+getContractFactory(name: 'IKaanGToken', signerOrOptions?: ethers.Signer | FactoryOptions): Promise<Contracts.IKaanGToken__factory>
 getContractFactory(name: 'KaanYieldVault', signerOrOptions?: ethers.Signer | FactoryOptions): Promise<Contracts.KaanYieldVault__factory>
 getContractFactory(name: 'MockUSDC', signerOrOptions?: ethers.Signer | FactoryOptions): Promise<Contracts.MockUSDC__factory>
 
@@ -29,10 +34,15 @@ getContractAt(name: 'IKaanGYieldVault', address: string | ethers.Addressable, si
 getContractAt(name: 'KaanGToken', address: string | ethers.Addressable, signer?: ethers.Signer): Promise<Contracts.KaanGToken>
 getContractAt(name: 'IKaanBuildVault', address: string | ethers.Addressable, signer?: ethers.Signer): Promise<Contracts.IKaanBuildVault>
 getContractAt(name: 'KaanGYieldVault', address: string | ethers.Addressable, signer?: ethers.Signer): Promise<Contracts.KaanGYieldVault>
+getContractAt(name: 'IKaanBuildVault', address: string | ethers.Addressable, signer?: ethers.Signer): Promise<Contracts.IKaanBuildVault>
+getContractAt(name: 'IKaanGToken', address: string | ethers.Addressable, signer?: ethers.Signer): Promise<Contracts.IKaanGToken>
+getContractAt(name: 'IKaanYieldVault', address: string | ethers.Addressable, signer?: ethers.Signer): Promise<Contracts.IKaanYieldVault>
+getContractAt(name: 'KaanRedemption', address: string | ethers.Addressable, signer?: ethers.Signer): Promise<Contracts.KaanRedemption>
 getContractAt(name: 'KaanSale', address: string | ethers.Addressable, signer?: ethers.Signer): Promise<Contracts.KaanSale>
 getContractAt(name: 'IKaanYieldVault', address: string | ethers.Addressable, signer?: ethers.Signer): Promise<Contracts.IKaanYieldVault>
 getContractAt(name: 'KaanToken', address: string | ethers.Addressable, signer?: ethers.Signer): Promise<Contracts.KaanToken>
 getContractAt(name: 'KaanXToken', address: string | ethers.Addressable, signer?: ethers.Signer): Promise<Contracts.KaanXToken>
+getContractAt(name: 'IKaanGToken', address: string | ethers.Addressable, signer?: ethers.Signer): Promise<Contracts.IKaanGToken>
 getContractAt(name: 'KaanYieldVault', address: string | ethers.Addressable, signer?: ethers.Signer): Promise<Contracts.KaanYieldVault>
 getContractAt(name: 'MockUSDC', address: string | ethers.Addressable, signer?: ethers.Signer): Promise<Contracts.MockUSDC>
 
@@ -42,10 +52,15 @@ deployContract(name: 'IKaanGYieldVault', signerOrOptions?: ethers.Signer | Deplo
 deployContract(name: 'KaanGToken', signerOrOptions?: ethers.Signer | DeployContractOptions): Promise<Contracts.KaanGToken>
 deployContract(name: 'IKaanBuildVault', signerOrOptions?: ethers.Signer | DeployContractOptions): Promise<Contracts.IKaanBuildVault>
 deployContract(name: 'KaanGYieldVault', signerOrOptions?: ethers.Signer | DeployContractOptions): Promise<Contracts.KaanGYieldVault>
+deployContract(name: 'IKaanBuildVault', signerOrOptions?: ethers.Signer | DeployContractOptions): Promise<Contracts.IKaanBuildVault>
+deployContract(name: 'IKaanGToken', signerOrOptions?: ethers.Signer | DeployContractOptions): Promise<Contracts.IKaanGToken>
+deployContract(name: 'IKaanYieldVault', signerOrOptions?: ethers.Signer | DeployContractOptions): Promise<Contracts.IKaanYieldVault>
+deployContract(name: 'KaanRedemption', signerOrOptions?: ethers.Signer | DeployContractOptions): Promise<Contracts.KaanRedemption>
 deployContract(name: 'KaanSale', signerOrOptions?: ethers.Signer | DeployContractOptions): Promise<Contracts.KaanSale>
 deployContract(name: 'IKaanYieldVault', signerOrOptions?: ethers.Signer | DeployContractOptions): Promise<Contracts.IKaanYieldVault>
 deployContract(name: 'KaanToken', signerOrOptions?: ethers.Signer | DeployContractOptions): Promise<Contracts.KaanToken>
 deployContract(name: 'KaanXToken', signerOrOptions?: ethers.Signer | DeployContractOptions): Promise<Contracts.KaanXToken>
+deployContract(name: 'IKaanGToken', signerOrOptions?: ethers.Signer | DeployContractOptions): Promise<Contracts.IKaanGToken>
 deployContract(name: 'KaanYieldVault', signerOrOptions?: ethers.Signer | DeployContractOptions): Promise<Contracts.KaanYieldVault>
 deployContract(name: 'MockUSDC', signerOrOptions?: ethers.Signer | DeployContractOptions): Promise<Contracts.MockUSDC>
 
@@ -55,10 +70,15 @@ deployContract(name: 'IKaanGYieldVault', args: any[], signerOrOptions?: ethers.S
 deployContract(name: 'KaanGToken', args: any[], signerOrOptions?: ethers.Signer | DeployContractOptions): Promise<Contracts.KaanGToken>
 deployContract(name: 'IKaanBuildVault', args: any[], signerOrOptions?: ethers.Signer | DeployContractOptions): Promise<Contracts.IKaanBuildVault>
 deployContract(name: 'KaanGYieldVault', args: any[], signerOrOptions?: ethers.Signer | DeployContractOptions): Promise<Contracts.KaanGYieldVault>
+deployContract(name: 'IKaanBuildVault', args: any[], signerOrOptions?: ethers.Signer | DeployContractOptions): Promise<Contracts.IKaanBuildVault>
+deployContract(name: 'IKaanGToken', args: any[], signerOrOptions?: ethers.Signer | DeployContractOptions): Promise<Contracts.IKaanGToken>
+deployContract(name: 'IKaanYieldVault', args: any[], signerOrOptions?: ethers.Signer | DeployContractOptions): Promise<Contracts.IKaanYieldVault>
+deployContract(name: 'KaanRedemption', args: any[], signerOrOptions?: ethers.Signer | DeployContractOptions): Promise<Contracts.KaanRedemption>
 deployContract(name: 'KaanSale', args: any[], signerOrOptions?: ethers.Signer | DeployContractOptions): Promise<Contracts.KaanSale>
 deployContract(name: 'IKaanYieldVault', args: any[], signerOrOptions?: ethers.Signer | DeployContractOptions): Promise<Contracts.IKaanYieldVault>
 deployContract(name: 'KaanToken', args: any[], signerOrOptions?: ethers.Signer | DeployContractOptions): Promise<Contracts.KaanToken>
 deployContract(name: 'KaanXToken', args: any[], signerOrOptions?: ethers.Signer | DeployContractOptions): Promise<Contracts.KaanXToken>
+deployContract(name: 'IKaanGToken', args: any[], signerOrOptions?: ethers.Signer | DeployContractOptions): Promise<Contracts.IKaanGToken>
 deployContract(name: 'KaanYieldVault', args: any[], signerOrOptions?: ethers.Signer | DeployContractOptions): Promise<Contracts.KaanYieldVault>
 deployContract(name: 'MockUSDC', args: any[], signerOrOptions?: ethers.Signer | DeployContractOptions): Promise<Contracts.MockUSDC>
 

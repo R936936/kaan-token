@@ -4,12 +4,13 @@ import { network } from "hardhat";
 const { ethers } = await network.connect();
 
 describe("KAAN — Tulum Yield Token", function () {
-  let usdc, kaan, vault, sale;
+  let usdc, kaan, kaang, vault, sale;
   let owner, alice, bob, carol;
 
   const TOTAL_SUPPLY = ethers.parseEther("300000");
   const SALE_ALLOCATION = ethers.parseEther("90000");
   const USDC = (n) => BigInt(n) * 1_000_000n; // USDC has 6 decimals
+  const KAANG = (n) => ethers.parseEther(String(n)); // KAANG has 18 decimals
 
   beforeEach(async function () {
     [owner, alice, bob, carol] = await ethers.getSigners();
@@ -20,10 +21,15 @@ describe("KAAN — Tulum Yield Token", function () {
     const KaanToken = await ethers.getContractFactory("KaanToken");
     kaan = await KaanToken.deploy(owner.address);
 
+    // KaanGToken (KAANG) required by new KaanYieldVault constructor
+    const KaanGToken = await ethers.getContractFactory("KaanGToken");
+    kaang = await KaanGToken.deploy(owner.address);
+
     const KaanYieldVault = await ethers.getContractFactory("KaanYieldVault");
     vault = await KaanYieldVault.deploy(
       await kaan.getAddress(),
       await usdc.getAddress(),
+      await kaang.getAddress(),
       owner.address
     );
 
@@ -34,8 +40,12 @@ describe("KAAN — Tulum Yield Token", function () {
       owner.address
     );
 
-    // Wire up vault and transfer sale allocation
+    // Wire KAAN → vault (Synthetix transfer hook)
     await kaan.setYieldVault(await vault.getAddress());
+    // Wire KAANG → vault can mint KAANG to KAAN holders
+    await kaang.setYieldVault(await vault.getAddress());
+    // Wire KaanYieldVault: deploy a minimal redemption placeholder so reserve can be released
+    // (Full redemption cycle is tested in kaang.test.js)
     await kaan.transfer(await sale.getAddress(), SALE_ALLOCATION);
   });
 
@@ -184,17 +194,15 @@ describe("KAAN — Tulum Yield Token", function () {
   });
 
   // ═══════════════ YIELD VAULT TESTS ═══════════════
+  // KaanYieldVault now mints KAANG (not USDC) to KAAN holders.
+  // USDC is stored in reserve; holders call claimKaang() to receive KAANG tokens.
 
   describe("KaanYieldVault", function () {
-    // Use USDC amounts divisible by 300,000 to avoid Synthetix accumulator rounding
-    const RENT = (n) => USDC(n);
-
     async function depositRent(amount) {
       await usdc.approve(await vault.getAddress(), USDC(amount));
       await vault.depositRent(USDC(amount));
     }
 
-    // Helper: give alice 100% of all 300K KAAN (buy 90K from sale + transfer 210K)
     async function giveAliceAllTokens() {
       await kaan.transfer(alice.address, ethers.parseEther("210000"));
       await sale.setSaleActive(true);
@@ -203,27 +211,31 @@ describe("KAAN — Tulum Yield Token", function () {
       await sale.connect(alice).buyKaan(ethers.parseEther("90000"));
     }
 
-    it("single holder claims all deposited rent", async function () {
+    it("single holder claims all deposited rent as KAANG", async function () {
       // Owner holds 210K out of 300K; deposit 3000 USDC
       await depositRent(3000);
 
-      const pending = await vault.pendingYield(owner.address);
-      // Owner has 210K/300K → gets 70% of 3000 = 2100
-      expect(pending).to.equal(USDC(2100));
+      const pending = await vault.pendingKaangFor(owner.address);
+      // Owner has 210K/300K → gets 70% of 3000 KAANG = 2100 KAANG (18 dec)
+      expect(pending).to.equal(KAANG(2100));
 
-      await vault.claimYield();
-      expect(await usdc.balanceOf(owner.address)).to.be.gte(USDC(2100));
+      await vault.claimKaang();
+      expect(await kaang.balanceOf(owner.address)).to.equal(KAANG(2100));
+    });
+
+    it("USDC goes to reserve — not directly to holders", async function () {
+      await depositRent(3000);
+      // No USDC distributed directly
+      expect(await usdc.balanceOf(alice.address)).to.equal(0n);
+      expect(await vault.usdcReserve()).to.equal(USDC(3000));
     });
 
     it("two holders split proportionally (60/40)", async function () {
       const aliceAmount = ethers.parseEther("180000"); // 60% of 300K
       const bobAmount = ethers.parseEther("120000");   // 40% of 300K
 
-      // Owner has 210K; transfer 180K to alice
       await kaan.transfer(alice.address, aliceAmount);
-      // Owner has 30K left; give it to bob
       await kaan.transfer(bob.address, ethers.parseEther("30000"));
-      // Bob buys 90K from sale → total 120K
       await sale.setSaleActive(true);
       await usdc.mint(bob.address, USDC(90_000));
       await usdc.connect(bob).approve(await sale.getAddress(), USDC(90_000));
@@ -234,62 +246,57 @@ describe("KAAN — Tulum Yield Token", function () {
 
       await depositRent(3000);
 
-      expect(await vault.pendingYield(alice.address)).to.equal(USDC(1800)); // 60%
-      expect(await vault.pendingYield(bob.address)).to.equal(USDC(1200));   // 40%
+      expect(await vault.pendingKaangFor(alice.address)).to.equal(KAANG(1800)); // 60%
+      expect(await vault.pendingKaangFor(bob.address)).to.equal(KAANG(1200));   // 40%
     });
 
-    it("transfer tokens mid-period — yield split correctly", async function () {
-      // Give alice all 210K owner tokens
+    it("transfer tokens mid-period — KAANG split correctly", async function () {
       await kaan.transfer(alice.address, ethers.parseEther("210000"));
+      await depositRent(3000); // alice earns 2100 KAANG (70%)
 
-      // Deposit 3000 USDC — alice gets 210K/300K = 70% = 2100
-      await depositRent(3000);
-
-      // Alice transfers half her KAAN to bob before claiming
+      // Alice transfers half KAAN to bob before claiming — vault snapshots
       await kaan.connect(alice).transfer(bob.address, ethers.parseEther("105000"));
 
-      // Alice should still have her pre-transfer accumulated yield
-      const alicePending = await vault.pendingYield(alice.address);
-      expect(alicePending).to.equal(USDC(2100)); // earned before transfer
+      // Alice still has her pre-transfer accumulated KAANG
+      expect(await vault.pendingKaangFor(alice.address)).to.equal(KAANG(2100));
+      // Bob has 0 (got tokens after deposit)
+      expect(await vault.pendingKaangFor(bob.address)).to.equal(0n);
 
-      // Bob has 0 pending (got tokens AFTER deposit)
-      expect(await vault.pendingYield(bob.address)).to.equal(0n);
-
-      // Deposit more — should split according to new balances
+      // New deposit splits per new balances
       await depositRent(3000);
-
       // Alice: 105K/300K of 3000 = 1050 + previous 2100 = 3150
-      expect(await vault.pendingYield(alice.address)).to.equal(USDC(3150));
+      expect(await vault.pendingKaangFor(alice.address)).to.equal(KAANG(3150));
       // Bob: 105K/300K of 3000 = 1050
-      expect(await vault.pendingYield(bob.address)).to.equal(USDC(1050));
+      expect(await vault.pendingKaangFor(bob.address)).to.equal(KAANG(1050));
     });
 
-    it("claim twice — second claim returns 0", async function () {
+    it("claim twice — second claim reverts", async function () {
       await giveAliceAllTokens();
       await depositRent(1500);
 
-      await vault.connect(alice).claimYield();
+      await vault.connect(alice).claimKaang();
       await expect(
-        vault.connect(alice).claimYield()
+        vault.connect(alice).claimKaang()
       ).to.be.revertedWith("Nothing to claim");
     });
 
-    it("pendingYield accurate before and after deposit", async function () {
+    it("pendingKaangFor accurate before and after deposit", async function () {
       await kaan.transfer(alice.address, ethers.parseEther("150000")); // 50%
 
-      expect(await vault.pendingYield(alice.address)).to.equal(0);
+      expect(await vault.pendingKaangFor(alice.address)).to.equal(0n);
 
       await depositRent(6000);
-      // alice=150K/300K * 6000 = 3000
-      expect(await vault.pendingYield(alice.address)).to.equal(USDC(3000));
+      // alice=150K/300K * 6000 = 3000 KAANG
+      expect(await vault.pendingKaangFor(alice.address)).to.equal(KAANG(3000));
     });
 
-    it("totalRentDeposited accumulates", async function () {
+    it("totalRentDeposited and usdcReserve accumulate", async function () {
       await depositRent(600);
       await depositRent(900);
       await depositRent(1500);
 
       expect(await vault.totalRentDeposited()).to.equal(USDC(3000));
+      expect(await vault.usdcReserve()).to.equal(USDC(3000));
     });
 
     it("lastRentDeposit updates each deposit", async function () {
@@ -308,7 +315,6 @@ describe("KAAN — Tulum Yield Token", function () {
     it("non-owner cannot depositRent", async function () {
       await usdc.mint(alice.address, USDC(3000));
       await usdc.connect(alice).approve(await vault.getAddress(), USDC(3000));
-
       await expect(
         vault.connect(alice).depositRent(USDC(3000))
       ).to.be.revertedWithCustomError(vault, "OwnableUnauthorizedAccount");
@@ -318,51 +324,44 @@ describe("KAAN — Tulum Yield Token", function () {
       await usdc.approve(await vault.getAddress(), USDC(3000));
       await expect(vault.depositRent(USDC(3000)))
         .to.emit(vault, "RentDeposited")
-        .withArgs(USDC(3000), (val) => val > 0n);
+        .withArgs(USDC(3000), USDC(3000), (val) => val > 0n);
     });
 
-    it("emits YieldClaimed event", async function () {
+    it("emits KaangClaimed event", async function () {
       await giveAliceAllTokens();
       await depositRent(3000);
 
-      await expect(vault.connect(alice).claimYield())
-        .to.emit(vault, "YieldClaimed")
-        .withArgs(alice.address, USDC(3000));
+      await expect(vault.connect(alice).claimKaang())
+        .to.emit(vault, "KaangClaimed")
+        .withArgs(alice.address, KAANG(3000));
     });
 
     it("estimatedAPY returns 0 with no deposits", async function () {
       expect(await vault.estimatedAPY()).to.equal(0);
     });
 
-    it("estimatedAPY returns reasonable value after deposits", async function () {
-      // Deposit $2,000/month for 3 months = $6,000 total
-      // Annualised = (6000/3) * 12 = $24,000
-      // APY = 24000/300000 = 8% = 800 bps
+    it("estimatedAPY returns 800 bps (8%) after consistent deposits", async function () {
       await depositRent(2000);
       await depositRent(2000);
       await depositRent(2000);
-
-      const apy = await vault.estimatedAPY();
-      expect(apy).to.equal(800n); // 800 basis points = 8%
+      expect(await vault.estimatedAPY()).to.equal(800n);
     });
 
     it("zero amount deposit reverts", async function () {
       await expect(vault.depositRent(0)).to.be.revertedWith("Zero amount");
     });
 
-    it("handles multiple depositors claiming independently", async function () {
-      await kaan.transfer(alice.address, ethers.parseEther("150000"));
-      await kaan.transfer(bob.address, ethers.parseEther("60000"));
+    it("multiple holders claim KAANG independently", async function () {
+      await kaan.transfer(alice.address, ethers.parseEther("150000")); // 50%
+      await kaan.transfer(bob.address, ethers.parseEther("60000"));    // 20%
 
       await depositRent(3000);
 
-      // alice: 150K/300K * 3000 = 1500
-      await vault.connect(alice).claimYield();
-      expect(await usdc.balanceOf(alice.address)).to.equal(USDC(1500));
+      await vault.connect(alice).claimKaang();
+      await vault.connect(bob).claimKaang();
 
-      // bob: 60K/300K * 3000 = 600
-      await vault.connect(bob).claimYield();
-      expect(await usdc.balanceOf(bob.address)).to.equal(USDC(600));
+      expect(await kaang.balanceOf(alice.address)).to.equal(KAANG(1500)); // 50%
+      expect(await kaang.balanceOf(bob.address)).to.equal(KAANG(600));    // 20%
     });
   });
 });

@@ -4,8 +4,9 @@
 export * as kaanBuildVaultSol from './KaanBuildVault.sol/index.js';
 export * as kaanGTokenSol from './KaanGToken.sol/index.js';
 export * as kaanGYieldVaultSol from './KaanGYieldVault.sol/index.js';
+export * as kaanRedemptionSol from './KaanRedemption.sol/index.js';
 export * as kaanTokenSol from './KaanToken.sol/index.js';
+export * as kaanYieldVaultSol from './KaanYieldVault.sol/index.js';
 export { KaanSale__factory } from './KaanSale__factory.js';
 export { KaanXToken__factory } from './KaanXToken__factory.js';
-export { KaanYieldVault__factory } from './KaanYieldVault__factory.js';
 export { MockUSDC__factory } from './MockUSDC__factory.js';

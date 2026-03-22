@@ -6,27 +6,35 @@ import type { TypedContractEvent, TypedDeferredTopicFilter, TypedEventLog, Typed
   
 
   export interface KaanGTokenInterface extends Interface {
-    getFunction(nameOrSignature: "DOMAIN_SEPARATOR" | "allowance" | "approve" | "balanceOf" | "buildVault" | "buildVaultSet" | "decimals" | "eip712Domain" | "mintFromBuild" | "name" | "nonces" | "owner" | "pause" | "paused" | "permit" | "renounceOwnership" | "setBuildVault" | "setYieldVault" | "symbol" | "totalSupply" | "transfer" | "transferFrom" | "transferOwnership" | "unpause" | "yieldVault"): FunctionFragment;
+    getFunction(nameOrSignature: "DOMAIN_SEPARATOR" | "allowance" | "approve" | "approvedContract" | "balanceOf" | "buildVault" | "buildVaultSet" | "burn" | "burnFrom" | "decimals" | "eip712Domain" | "mintFromBuild" | "mintFromYield" | "name" | "nonces" | "owner" | "pause" | "paused" | "permit" | "redemptionContract" | "redemptionSet" | "renounceOwnership" | "setApprovedContract" | "setBuildVault" | "setRedemptionContract" | "setYieldVault" | "symbol" | "totalSupply" | "transfer" | "transferFrom" | "transferOwnership" | "unpause" | "yieldVault"): FunctionFragment;
 
-    getEvent(nameOrSignatureOrTopic: "Approval" | "BuildVaultSet" | "EIP712DomainChanged" | "OwnershipTransferred" | "Paused" | "Transfer" | "Unpaused" | "YieldVaultSet"): EventFragment;
+    getEvent(nameOrSignatureOrTopic: "Approval" | "BuildVaultSet" | "ContractApproved" | "EIP712DomainChanged" | "OwnershipTransferred" | "Paused" | "RedemptionContractSet" | "Transfer" | "Unpaused" | "YieldVaultSet"): EventFragment;
 
     encodeFunctionData(functionFragment: 'DOMAIN_SEPARATOR', values?: undefined): string;
 encodeFunctionData(functionFragment: 'allowance', values: [AddressLike, AddressLike]): string;
 encodeFunctionData(functionFragment: 'approve', values: [AddressLike, BigNumberish]): string;
+encodeFunctionData(functionFragment: 'approvedContract', values: [AddressLike]): string;
 encodeFunctionData(functionFragment: 'balanceOf', values: [AddressLike]): string;
 encodeFunctionData(functionFragment: 'buildVault', values?: undefined): string;
 encodeFunctionData(functionFragment: 'buildVaultSet', values?: undefined): string;
+encodeFunctionData(functionFragment: 'burn', values: [BigNumberish]): string;
+encodeFunctionData(functionFragment: 'burnFrom', values: [AddressLike, BigNumberish]): string;
 encodeFunctionData(functionFragment: 'decimals', values?: undefined): string;
 encodeFunctionData(functionFragment: 'eip712Domain', values?: undefined): string;
 encodeFunctionData(functionFragment: 'mintFromBuild', values: [AddressLike, BigNumberish]): string;
+encodeFunctionData(functionFragment: 'mintFromYield', values: [AddressLike, BigNumberish]): string;
 encodeFunctionData(functionFragment: 'name', values?: undefined): string;
 encodeFunctionData(functionFragment: 'nonces', values: [AddressLike]): string;
 encodeFunctionData(functionFragment: 'owner', values?: undefined): string;
 encodeFunctionData(functionFragment: 'pause', values?: undefined): string;
 encodeFunctionData(functionFragment: 'paused', values?: undefined): string;
 encodeFunctionData(functionFragment: 'permit', values: [AddressLike, AddressLike, BigNumberish, BigNumberish, BigNumberish, BytesLike, BytesLike]): string;
+encodeFunctionData(functionFragment: 'redemptionContract', values?: undefined): string;
+encodeFunctionData(functionFragment: 'redemptionSet', values?: undefined): string;
 encodeFunctionData(functionFragment: 'renounceOwnership', values?: undefined): string;
+encodeFunctionData(functionFragment: 'setApprovedContract', values: [AddressLike, boolean]): string;
 encodeFunctionData(functionFragment: 'setBuildVault', values: [AddressLike]): string;
+encodeFunctionData(functionFragment: 'setRedemptionContract', values: [AddressLike]): string;
 encodeFunctionData(functionFragment: 'setYieldVault', values: [AddressLike]): string;
 encodeFunctionData(functionFragment: 'symbol', values?: undefined): string;
 encodeFunctionData(functionFragment: 'totalSupply', values?: undefined): string;
@@ -39,20 +47,28 @@ encodeFunctionData(functionFragment: 'yieldVault', values?: undefined): string;
     decodeFunctionResult(functionFragment: 'DOMAIN_SEPARATOR', data: BytesLike): Result;
 decodeFunctionResult(functionFragment: 'allowance', data: BytesLike): Result;
 decodeFunctionResult(functionFragment: 'approve', data: BytesLike): Result;
+decodeFunctionResult(functionFragment: 'approvedContract', data: BytesLike): Result;
 decodeFunctionResult(functionFragment: 'balanceOf', data: BytesLike): Result;
 decodeFunctionResult(functionFragment: 'buildVault', data: BytesLike): Result;
 decodeFunctionResult(functionFragment: 'buildVaultSet', data: BytesLike): Result;
+decodeFunctionResult(functionFragment: 'burn', data: BytesLike): Result;
+decodeFunctionResult(functionFragment: 'burnFrom', data: BytesLike): Result;
 decodeFunctionResult(functionFragment: 'decimals', data: BytesLike): Result;
 decodeFunctionResult(functionFragment: 'eip712Domain', data: BytesLike): Result;
 decodeFunctionResult(functionFragment: 'mintFromBuild', data: BytesLike): Result;
+decodeFunctionResult(functionFragment: 'mintFromYield', data: BytesLike): Result;
 decodeFunctionResult(functionFragment: 'name', data: BytesLike): Result;
 decodeFunctionResult(functionFragment: 'nonces', data: BytesLike): Result;
 decodeFunctionResult(functionFragment: 'owner', data: BytesLike): Result;
 decodeFunctionResult(functionFragment: 'pause', data: BytesLike): Result;
 decodeFunctionResult(functionFragment: 'paused', data: BytesLike): Result;
 decodeFunctionResult(functionFragment: 'permit', data: BytesLike): Result;
+decodeFunctionResult(functionFragment: 'redemptionContract', data: BytesLike): Result;
+decodeFunctionResult(functionFragment: 'redemptionSet', data: BytesLike): Result;
 decodeFunctionResult(functionFragment: 'renounceOwnership', data: BytesLike): Result;
+decodeFunctionResult(functionFragment: 'setApprovedContract', data: BytesLike): Result;
 decodeFunctionResult(functionFragment: 'setBuildVault', data: BytesLike): Result;
+decodeFunctionResult(functionFragment: 'setRedemptionContract', data: BytesLike): Result;
 decodeFunctionResult(functionFragment: 'setYieldVault', data: BytesLike): Result;
 decodeFunctionResult(functionFragment: 'symbol', data: BytesLike): Result;
 decodeFunctionResult(functionFragment: 'totalSupply', data: BytesLike): Result;
@@ -80,6 +96,18 @@ decodeFunctionResult(functionFragment: 'yieldVault', data: BytesLike): Result;
       export type InputTuple = [vault: AddressLike];
       export type OutputTuple = [vault: string];
       export interface OutputObject {vault: string };
+      export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>
+      export type Filter = TypedDeferredTopicFilter<Event>
+      export type Log = TypedEventLog<Event>
+      export type LogDescription = TypedLogDescription<Event>
+    }
+
+  
+
+    export namespace ContractApprovedEvent {
+      export type InputTuple = [contractAddr: AddressLike, approved: boolean];
+      export type OutputTuple = [contractAddr: string, approved: boolean];
+      export interface OutputObject {contractAddr: string, approved: boolean };
       export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>
       export type Filter = TypedDeferredTopicFilter<Event>
       export type Log = TypedEventLog<Event>
@@ -116,6 +144,18 @@ decodeFunctionResult(functionFragment: 'yieldVault', data: BytesLike): Result;
       export type InputTuple = [account: AddressLike];
       export type OutputTuple = [account: string];
       export interface OutputObject {account: string };
+      export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>
+      export type Filter = TypedDeferredTopicFilter<Event>
+      export type Log = TypedEventLog<Event>
+      export type LogDescription = TypedLogDescription<Event>
+    }
+
+  
+
+    export namespace RedemptionContractSetEvent {
+      export type InputTuple = [redemption: AddressLike];
+      export type OutputTuple = [redemption: string];
+      export interface OutputObject {redemption: string };
       export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>
       export type Filter = TypedDeferredTopicFilter<Event>
       export type Log = TypedEventLog<Event>
@@ -218,6 +258,14 @@ decodeFunctionResult(functionFragment: 'yieldVault', data: BytesLike): Result;
     
 
     
+    approvedContract: TypedContractMethod<
+      [arg0: AddressLike, ],
+      [boolean],
+      'view'
+    >
+    
+
+    
     balanceOf: TypedContractMethod<
       [account: AddressLike, ],
       [bigint],
@@ -242,6 +290,22 @@ decodeFunctionResult(functionFragment: 'yieldVault', data: BytesLike): Result;
     
 
     
+    burn: TypedContractMethod<
+      [value: BigNumberish, ],
+      [void],
+      'nonpayable'
+    >
+    
+
+    
+    burnFrom: TypedContractMethod<
+      [account: AddressLike, value: BigNumberish, ],
+      [void],
+      'nonpayable'
+    >
+    
+
+    
     decimals: TypedContractMethod<
       [],
       [bigint],
@@ -259,6 +323,14 @@ decodeFunctionResult(functionFragment: 'yieldVault', data: BytesLike): Result;
 
     
     mintFromBuild: TypedContractMethod<
+      [to: AddressLike, amount: BigNumberish, ],
+      [void],
+      'nonpayable'
+    >
+    
+
+    
+    mintFromYield: TypedContractMethod<
       [to: AddressLike, amount: BigNumberish, ],
       [void],
       'nonpayable'
@@ -314,6 +386,22 @@ decodeFunctionResult(functionFragment: 'yieldVault', data: BytesLike): Result;
     
 
     
+    redemptionContract: TypedContractMethod<
+      [],
+      [string],
+      'view'
+    >
+    
+
+    
+    redemptionSet: TypedContractMethod<
+      [],
+      [boolean],
+      'view'
+    >
+    
+
+    
     renounceOwnership: TypedContractMethod<
       [],
       [void],
@@ -322,8 +410,24 @@ decodeFunctionResult(functionFragment: 'yieldVault', data: BytesLike): Result;
     
 
     
+    setApprovedContract: TypedContractMethod<
+      [_contract: AddressLike, _approved: boolean, ],
+      [void],
+      'nonpayable'
+    >
+    
+
+    
     setBuildVault: TypedContractMethod<
       [_vault: AddressLike, ],
+      [void],
+      'nonpayable'
+    >
+    
+
+    
+    setRedemptionContract: TypedContractMethod<
+      [_redemption: AddressLike, ],
       [void],
       'nonpayable'
     >
@@ -411,6 +515,11 @@ getFunction(nameOrSignature: 'approve'): TypedContractMethod<
       [boolean],
       'nonpayable'
     >;
+getFunction(nameOrSignature: 'approvedContract'): TypedContractMethod<
+      [arg0: AddressLike, ],
+      [boolean],
+      'view'
+    >;
 getFunction(nameOrSignature: 'balanceOf'): TypedContractMethod<
       [account: AddressLike, ],
       [bigint],
@@ -426,6 +535,16 @@ getFunction(nameOrSignature: 'buildVaultSet'): TypedContractMethod<
       [boolean],
       'view'
     >;
+getFunction(nameOrSignature: 'burn'): TypedContractMethod<
+      [value: BigNumberish, ],
+      [void],
+      'nonpayable'
+    >;
+getFunction(nameOrSignature: 'burnFrom'): TypedContractMethod<
+      [account: AddressLike, value: BigNumberish, ],
+      [void],
+      'nonpayable'
+    >;
 getFunction(nameOrSignature: 'decimals'): TypedContractMethod<
       [],
       [bigint],
@@ -437,6 +556,11 @@ getFunction(nameOrSignature: 'eip712Domain'): TypedContractMethod<
       'view'
     >;
 getFunction(nameOrSignature: 'mintFromBuild'): TypedContractMethod<
+      [to: AddressLike, amount: BigNumberish, ],
+      [void],
+      'nonpayable'
+    >;
+getFunction(nameOrSignature: 'mintFromYield'): TypedContractMethod<
       [to: AddressLike, amount: BigNumberish, ],
       [void],
       'nonpayable'
@@ -471,13 +595,33 @@ getFunction(nameOrSignature: 'permit'): TypedContractMethod<
       [void],
       'nonpayable'
     >;
+getFunction(nameOrSignature: 'redemptionContract'): TypedContractMethod<
+      [],
+      [string],
+      'view'
+    >;
+getFunction(nameOrSignature: 'redemptionSet'): TypedContractMethod<
+      [],
+      [boolean],
+      'view'
+    >;
 getFunction(nameOrSignature: 'renounceOwnership'): TypedContractMethod<
       [],
       [void],
       'nonpayable'
     >;
+getFunction(nameOrSignature: 'setApprovedContract'): TypedContractMethod<
+      [_contract: AddressLike, _approved: boolean, ],
+      [void],
+      'nonpayable'
+    >;
 getFunction(nameOrSignature: 'setBuildVault'): TypedContractMethod<
       [_vault: AddressLike, ],
+      [void],
+      'nonpayable'
+    >;
+getFunction(nameOrSignature: 'setRedemptionContract'): TypedContractMethod<
+      [_redemption: AddressLike, ],
       [void],
       'nonpayable'
     >;
@@ -524,9 +668,11 @@ getFunction(nameOrSignature: 'yieldVault'): TypedContractMethod<
 
     getEvent(key: 'Approval'): TypedContractEvent<ApprovalEvent.InputTuple, ApprovalEvent.OutputTuple, ApprovalEvent.OutputObject>;
 getEvent(key: 'BuildVaultSet'): TypedContractEvent<BuildVaultSetEvent.InputTuple, BuildVaultSetEvent.OutputTuple, BuildVaultSetEvent.OutputObject>;
+getEvent(key: 'ContractApproved'): TypedContractEvent<ContractApprovedEvent.InputTuple, ContractApprovedEvent.OutputTuple, ContractApprovedEvent.OutputObject>;
 getEvent(key: 'EIP712DomainChanged'): TypedContractEvent<EIP712DomainChangedEvent.InputTuple, EIP712DomainChangedEvent.OutputTuple, EIP712DomainChangedEvent.OutputObject>;
 getEvent(key: 'OwnershipTransferred'): TypedContractEvent<OwnershipTransferredEvent.InputTuple, OwnershipTransferredEvent.OutputTuple, OwnershipTransferredEvent.OutputObject>;
 getEvent(key: 'Paused'): TypedContractEvent<PausedEvent.InputTuple, PausedEvent.OutputTuple, PausedEvent.OutputObject>;
+getEvent(key: 'RedemptionContractSet'): TypedContractEvent<RedemptionContractSetEvent.InputTuple, RedemptionContractSetEvent.OutputTuple, RedemptionContractSetEvent.OutputObject>;
 getEvent(key: 'Transfer'): TypedContractEvent<TransferEvent.InputTuple, TransferEvent.OutputTuple, TransferEvent.OutputObject>;
 getEvent(key: 'Unpaused'): TypedContractEvent<UnpausedEvent.InputTuple, UnpausedEvent.OutputTuple, UnpausedEvent.OutputObject>;
 getEvent(key: 'YieldVaultSet'): TypedContractEvent<YieldVaultSetEvent.InputTuple, YieldVaultSetEvent.OutputTuple, YieldVaultSetEvent.OutputObject>;
@@ -541,6 +687,10 @@ getEvent(key: 'YieldVaultSet'): TypedContractEvent<YieldVaultSetEvent.InputTuple
       BuildVaultSet: TypedContractEvent<BuildVaultSetEvent.InputTuple, BuildVaultSetEvent.OutputTuple, BuildVaultSetEvent.OutputObject>;
     
 
+      'ContractApproved(address,bool)': TypedContractEvent<ContractApprovedEvent.InputTuple, ContractApprovedEvent.OutputTuple, ContractApprovedEvent.OutputObject>;
+      ContractApproved: TypedContractEvent<ContractApprovedEvent.InputTuple, ContractApprovedEvent.OutputTuple, ContractApprovedEvent.OutputObject>;
+    
+
       'EIP712DomainChanged()': TypedContractEvent<EIP712DomainChangedEvent.InputTuple, EIP712DomainChangedEvent.OutputTuple, EIP712DomainChangedEvent.OutputObject>;
       EIP712DomainChanged: TypedContractEvent<EIP712DomainChangedEvent.InputTuple, EIP712DomainChangedEvent.OutputTuple, EIP712DomainChangedEvent.OutputObject>;
     
@@ -551,6 +701,10 @@ getEvent(key: 'YieldVaultSet'): TypedContractEvent<YieldVaultSetEvent.InputTuple
 
       'Paused(address)': TypedContractEvent<PausedEvent.InputTuple, PausedEvent.OutputTuple, PausedEvent.OutputObject>;
       Paused: TypedContractEvent<PausedEvent.InputTuple, PausedEvent.OutputTuple, PausedEvent.OutputObject>;
+    
+
+      'RedemptionContractSet(address)': TypedContractEvent<RedemptionContractSetEvent.InputTuple, RedemptionContractSetEvent.OutputTuple, RedemptionContractSetEvent.OutputObject>;
+      RedemptionContractSet: TypedContractEvent<RedemptionContractSetEvent.InputTuple, RedemptionContractSetEvent.OutputTuple, RedemptionContractSetEvent.OutputObject>;
     
 
       'Transfer(address,address,uint256)': TypedContractEvent<TransferEvent.InputTuple, TransferEvent.OutputTuple, TransferEvent.OutputObject>;

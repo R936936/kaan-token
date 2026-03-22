@@ -146,8 +146,29 @@ contract KaanBuildVault is Ownable, ReentrancyGuard {
     // INVESTORS: Fund, claim KAANG, auto-compound
     // ─────────────────────────────────────────────────────────────
 
+    /// @notice Approved redemption contract — routes KAANG conversions as investments
+    address public redemptionContract;
+    bool    public redemptionSet;
+
+    function setRedemptionContract(address _redemption) external onlyOwner {
+        require(!redemptionSet, "Already set");
+        redemptionContract = _redemption;
+        redemptionSet = true;
+    }
+
+    /// @notice Called by KaanRedemption: invest USDC on behalf of a holder who burned KAANG.
+    ///         USDC must be approved to this contract by KaanRedemption before calling.
+    function investFrom(address investor, uint256 projectId, uint256 usdcAmount) external nonReentrant {
+        require(msg.sender == redemptionContract, "Only KaanRedemption");
+        _invest(investor, projectId, usdcAmount, true);
+    }
+
     /// @notice Invest USDC in a construction project
     function invest(uint256 projectId, uint256 usdcAmount) external nonReentrant {
+        _invest(msg.sender, projectId, usdcAmount, false);
+    }
+
+    function _invest(address investor, uint256 projectId, uint256 usdcAmount, bool fromRedemption) internal {
         Project storage p = projects[projectId];
         require(p.status == ProjectStatus.Funding, "Not accepting investment");
         require(usdcAmount > 0, "Zero amount");
@@ -155,11 +176,15 @@ contract KaanBuildVault is Ownable, ReentrancyGuard {
         uint256 remaining = p.targetUsdc - p.raisedUsdc;
         uint256 actual = usdcAmount > remaining ? remaining : usdcAmount;
 
-        usdc.safeTransferFrom(msg.sender, address(this), actual);
+        if (fromRedemption) {
+            usdc.safeTransferFrom(msg.sender, address(this), actual); // msg.sender = KaanRedemption
+        } else {
+            usdc.safeTransferFrom(investor, address(this), actual);
+        }
         p.raisedUsdc += actual;
-        investments[projectId][msg.sender].usdcDeposited += actual;
+        investments[projectId][investor].usdcDeposited += actual;
 
-        emit Invested(projectId, msg.sender, actual);
+        emit Invested(projectId, investor, actual);
     }
 
     /// @notice Claim KAANG tokens after project is complete (THE CONVERSION EVENT)

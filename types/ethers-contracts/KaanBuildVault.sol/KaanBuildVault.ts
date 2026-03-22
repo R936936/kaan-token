@@ -18,7 +18,7 @@ export declare namespace KaanBuildVault {
     }
 
   export interface KaanBuildVaultInterface extends Interface {
-    getFunction(nameOrSignature: "autoCompound" | "autoCompoundProjectId" | "cancelProject" | "claimKaang" | "completeMilestone" | "createProject" | "fundingProgress" | "getInvestment" | "getProject" | "invest" | "investments" | "kaang" | "owner" | "projectCount" | "projects" | "receiveAutoCompound" | "refund" | "renounceOwnership" | "setAutoCompoundProject" | "startBuilding" | "toggleAutoCompound" | "transferOwnership" | "usdc"): FunctionFragment;
+    getFunction(nameOrSignature: "autoCompound" | "autoCompoundProjectId" | "cancelProject" | "claimKaang" | "completeMilestone" | "createProject" | "fundingProgress" | "getInvestment" | "getProject" | "invest" | "investFrom" | "investments" | "kaang" | "owner" | "projectCount" | "projects" | "receiveAutoCompound" | "redemptionContract" | "redemptionSet" | "refund" | "renounceOwnership" | "setAutoCompoundProject" | "setRedemptionContract" | "startBuilding" | "toggleAutoCompound" | "transferOwnership" | "usdc"): FunctionFragment;
 
     getEvent(nameOrSignatureOrTopic: "AutoCompoundDeposit" | "AutoCompoundToggled" | "Invested" | "KaangClaimed" | "MilestoneCompleted" | "OwnershipTransferred" | "ProjectCompleted" | "ProjectCreated"): EventFragment;
 
@@ -32,15 +32,19 @@ encodeFunctionData(functionFragment: 'fundingProgress', values: [BigNumberish]):
 encodeFunctionData(functionFragment: 'getInvestment', values: [BigNumberish, AddressLike]): string;
 encodeFunctionData(functionFragment: 'getProject', values: [BigNumberish]): string;
 encodeFunctionData(functionFragment: 'invest', values: [BigNumberish, BigNumberish]): string;
+encodeFunctionData(functionFragment: 'investFrom', values: [AddressLike, BigNumberish, BigNumberish]): string;
 encodeFunctionData(functionFragment: 'investments', values: [BigNumberish, AddressLike]): string;
 encodeFunctionData(functionFragment: 'kaang', values?: undefined): string;
 encodeFunctionData(functionFragment: 'owner', values?: undefined): string;
 encodeFunctionData(functionFragment: 'projectCount', values?: undefined): string;
 encodeFunctionData(functionFragment: 'projects', values: [BigNumberish]): string;
 encodeFunctionData(functionFragment: 'receiveAutoCompound', values: [AddressLike, BigNumberish]): string;
+encodeFunctionData(functionFragment: 'redemptionContract', values?: undefined): string;
+encodeFunctionData(functionFragment: 'redemptionSet', values?: undefined): string;
 encodeFunctionData(functionFragment: 'refund', values: [BigNumberish]): string;
 encodeFunctionData(functionFragment: 'renounceOwnership', values?: undefined): string;
 encodeFunctionData(functionFragment: 'setAutoCompoundProject', values: [BigNumberish]): string;
+encodeFunctionData(functionFragment: 'setRedemptionContract', values: [AddressLike]): string;
 encodeFunctionData(functionFragment: 'startBuilding', values: [BigNumberish]): string;
 encodeFunctionData(functionFragment: 'toggleAutoCompound', values?: undefined): string;
 encodeFunctionData(functionFragment: 'transferOwnership', values: [AddressLike]): string;
@@ -56,15 +60,19 @@ decodeFunctionResult(functionFragment: 'fundingProgress', data: BytesLike): Resu
 decodeFunctionResult(functionFragment: 'getInvestment', data: BytesLike): Result;
 decodeFunctionResult(functionFragment: 'getProject', data: BytesLike): Result;
 decodeFunctionResult(functionFragment: 'invest', data: BytesLike): Result;
+decodeFunctionResult(functionFragment: 'investFrom', data: BytesLike): Result;
 decodeFunctionResult(functionFragment: 'investments', data: BytesLike): Result;
 decodeFunctionResult(functionFragment: 'kaang', data: BytesLike): Result;
 decodeFunctionResult(functionFragment: 'owner', data: BytesLike): Result;
 decodeFunctionResult(functionFragment: 'projectCount', data: BytesLike): Result;
 decodeFunctionResult(functionFragment: 'projects', data: BytesLike): Result;
 decodeFunctionResult(functionFragment: 'receiveAutoCompound', data: BytesLike): Result;
+decodeFunctionResult(functionFragment: 'redemptionContract', data: BytesLike): Result;
+decodeFunctionResult(functionFragment: 'redemptionSet', data: BytesLike): Result;
 decodeFunctionResult(functionFragment: 'refund', data: BytesLike): Result;
 decodeFunctionResult(functionFragment: 'renounceOwnership', data: BytesLike): Result;
 decodeFunctionResult(functionFragment: 'setAutoCompoundProject', data: BytesLike): Result;
+decodeFunctionResult(functionFragment: 'setRedemptionContract', data: BytesLike): Result;
 decodeFunctionResult(functionFragment: 'startBuilding', data: BytesLike): Result;
 decodeFunctionResult(functionFragment: 'toggleAutoCompound', data: BytesLike): Result;
 decodeFunctionResult(functionFragment: 'transferOwnership', data: BytesLike): Result;
@@ -282,6 +290,14 @@ decodeFunctionResult(functionFragment: 'usdc', data: BytesLike): Result;
     
 
     
+    investFrom: TypedContractMethod<
+      [investor: AddressLike, projectId: BigNumberish, usdcAmount: BigNumberish, ],
+      [void],
+      'nonpayable'
+    >
+    
+
+    
     investments: TypedContractMethod<
       [arg0: BigNumberish, arg1: AddressLike, ],
       [[bigint, boolean] & {usdcDeposited: bigint, claimed: boolean }],
@@ -330,6 +346,22 @@ decodeFunctionResult(functionFragment: 'usdc', data: BytesLike): Result;
     
 
     
+    redemptionContract: TypedContractMethod<
+      [],
+      [string],
+      'view'
+    >
+    
+
+    
+    redemptionSet: TypedContractMethod<
+      [],
+      [boolean],
+      'view'
+    >
+    
+
+    
     refund: TypedContractMethod<
       [projectId: BigNumberish, ],
       [void],
@@ -348,6 +380,14 @@ decodeFunctionResult(functionFragment: 'usdc', data: BytesLike): Result;
     
     setAutoCompoundProject: TypedContractMethod<
       [projectId: BigNumberish, ],
+      [void],
+      'nonpayable'
+    >
+    
+
+    
+    setRedemptionContract: TypedContractMethod<
+      [_redemption: AddressLike, ],
       [void],
       'nonpayable'
     >
@@ -438,6 +478,11 @@ getFunction(nameOrSignature: 'invest'): TypedContractMethod<
       [void],
       'nonpayable'
     >;
+getFunction(nameOrSignature: 'investFrom'): TypedContractMethod<
+      [investor: AddressLike, projectId: BigNumberish, usdcAmount: BigNumberish, ],
+      [void],
+      'nonpayable'
+    >;
 getFunction(nameOrSignature: 'investments'): TypedContractMethod<
       [arg0: BigNumberish, arg1: AddressLike, ],
       [[bigint, boolean] & {usdcDeposited: bigint, claimed: boolean }],
@@ -468,6 +513,16 @@ getFunction(nameOrSignature: 'receiveAutoCompound'): TypedContractMethod<
       [void],
       'nonpayable'
     >;
+getFunction(nameOrSignature: 'redemptionContract'): TypedContractMethod<
+      [],
+      [string],
+      'view'
+    >;
+getFunction(nameOrSignature: 'redemptionSet'): TypedContractMethod<
+      [],
+      [boolean],
+      'view'
+    >;
 getFunction(nameOrSignature: 'refund'): TypedContractMethod<
       [projectId: BigNumberish, ],
       [void],
@@ -480,6 +535,11 @@ getFunction(nameOrSignature: 'renounceOwnership'): TypedContractMethod<
     >;
 getFunction(nameOrSignature: 'setAutoCompoundProject'): TypedContractMethod<
       [projectId: BigNumberish, ],
+      [void],
+      'nonpayable'
+    >;
+getFunction(nameOrSignature: 'setRedemptionContract'): TypedContractMethod<
+      [_redemption: AddressLike, ],
       [void],
       'nonpayable'
     >;
